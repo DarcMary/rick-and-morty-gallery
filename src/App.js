@@ -1,9 +1,9 @@
-import Characters from "./components/Characters";
+import CharactersList from "./components/CharactersList]";
 
 function App() {
   return (
     <div>
-      <Characters/>
+      <CharactersList/>
     </div>
   );
 }
