@@ -5,17 +5,35 @@ function CharactersList() {
   const [characters, setCharacters] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   async function getCharacters() {
     const url = "https://rickandmortyapi.com/api/character";
     const response = await fetch(url);
     const data = await response.json();
-    setCharacters(data.results);
+    const updatedCharacters = data.results.map((character) => ({
+      ...character,
+      isFavorite: false,
+    }));
+    setCharacters(updatedCharacters);
   }
 
   useEffect(() => {
     getCharacters();
   }, []);
+
+  function handleFavorite(characterId) {
+    const updatedCharacters = characters.map((character) => {
+      if (character.id === characterId) {
+        return {
+          ...character,
+          isFavorite: !character.isFavorite,
+        };
+      }
+      return character;
+    });
+    setCharacters(updatedCharacters);
+  }
 
   useEffect(() => {
     const results = characters.filter((character) =>
@@ -23,6 +41,10 @@ function CharactersList() {
     );
     setFilteredCharacters(results);
   }, [searchTerm, characters]);
+
+  const favoriteCharacters = characters.filter(
+    (character) => character.isFavorite
+  );
 
   return (
     <div>
@@ -34,11 +56,20 @@ function CharactersList() {
           setSearchTerm(e.target.value);
         }}
       />
-      <h1>Characters</h1>
+      <button onClick={() => setShowFavorites(!showFavorites)}>
+        {showFavorites ? "Show All Characters" : "Show Favorites"}
+      </button>
+      <h1>{showFavorites ? "Favorite Characters" : "Characters"}</h1>
       <ul>
-        {filteredCharacters.map((character) => (
-          <CharacterCard key={character.id} character={character} />
-        ))}
+        {(showFavorites ? favoriteCharacters : filteredCharacters).map(
+          (character) => (
+            <CharacterCard
+              key={character.id}
+              character={character}
+              handleFavorite={() => handleFavorite(character.id)}
+            />
+          )
+        )}
       </ul>
     </div>
   );

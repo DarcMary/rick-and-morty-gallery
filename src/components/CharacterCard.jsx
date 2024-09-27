@@ -1,14 +1,11 @@
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { useState } from "react";
 
-function CharacterCard({ character }) {
-  const [favorite, setFavorite] = useState([]);
-
+function CharacterCard({ character, handleFavorite }) {
   return (
     <div>
       <h3>{character.name}</h3>
-      <div onClick={() => setFavorite(!favorite)}>
-        {favorite ? <FaRegStar /> : <FaStar />}
+      <div onClick={handleFavorite}>
+        {character.isFavorite ? <FaStar /> : <FaRegStar />}
       </div>
       <p>
         {character.status} - {character.species}
