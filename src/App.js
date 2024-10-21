@@ -1,8 +1,8 @@
-import CharactersList from "./components/CharactersList]";
+import CharactersList from "./components/CharactersList";
 
 function App() {
   return (
-    <div>
+    <div className="bg-gray-900 ">
       <CharactersList/>
     </div>
   );
